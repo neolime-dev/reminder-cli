@@ -27,7 +27,7 @@ You can install `reminder` using the provided `Makefile`.
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/YOUR_USERNAME/reminder-cli.git
+    git clone https://github.com/neolime-dev/reminder-cli.git
     cd reminder-cli
     ```
 
@@ -36,6 +36,19 @@ You can install `reminder` using the provided `Makefile`.
     sudo make install
     ```
     (This will copy the `reminder.py` script to `/usr/local/bin/reminder` and make it executable.)
+
+### Manual Installation (No Make)
+
+If you don't have `make` or prefer to install manually:
+
+1.  Copy the script to your bin directory:
+    ```bash
+    sudo cp reminder.py /usr/local/bin/reminder
+    ```
+2.  Make it executable:
+    ```bash
+    sudo chmod +x /usr/local/bin/reminder
+    ```
 
 ## 📖 Usage
 
