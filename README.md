@@ -1,4 +1,4 @@
-# Lembrete CLI
+# Reminder CLI
 
 A simple, lightweight CLI utility for Linux that sends native desktop notifications after a set period of time. Perfect for Window Manager users (i3, Sway, Hyprland, etc.) or any desktop environment.
 
@@ -7,7 +7,7 @@ A simple, lightweight CLI utility for Linux that sends native desktop notificati
 - Simple, natural syntax (e.g., `10m`, `1h`, `15:30`).
 - Native integration with system notifications (`notify-send`).
 - Lightweight: Written in Python with zero heavy dependencies.
-- detached execution: Runs in the background, freeing up your terminal immediately.
+- Detached execution: Runs in the background, freeing up your terminal immediately.
 
 ## 📋 Prerequisites
 
@@ -20,14 +20,14 @@ A simple, lightweight CLI utility for Linux that sends native desktop notificati
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/lembrete-cli.git
-   cd lembrete-cli
+   git clone https://github.com/YOUR_USERNAME/reminder-cli.git
+   cd reminder-cli
    ```
 
 2. Make it executable and install it to your PATH (e.g., `~/.local/bin`):
    ```bash
-   chmod +x lembrete.py
-   cp lembrete.py ~/.local/bin/lembrete
+   chmod +x reminder.py
+   cp reminder.py ~/.local/bin/reminder
    ```
 
 3. Ensure `~/.local/bin` is in your system's PATH.
@@ -35,23 +35,23 @@ A simple, lightweight CLI utility for Linux that sends native desktop notificati
 ## 📖 Usage
 
 ```bash
-lembrete "Message" <time>
+reminder "Message" <time>
 ```
 
 ### Examples
 
 ```bash
 # In 10 minutes
-lembrete "Take out the trash" 10m
+reminder "Take out the trash" 10m
 
 # In 1 hour
-lembrete "Team Meeting" 1h
+reminder "Team Meeting" 1h
 
 # At a specific time (today)
-lembrete "Lunch" 12:00
+reminder "Lunch" 12:00
 
 # Just seconds
-lembrete "Quick test" 30s
+reminder "Quick test" 30s
 ```
 
 ## 📄 License

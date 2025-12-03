@@ -6,12 +6,7 @@ import subprocess
 import datetime
 
 def print_usage():
-    print("""Usage: lembrete "Message" <time>
-
-Examples:
-  lembrete "Take out the trash" 10m
-  lembrete "Team Meeting" 1h
-  lembrete "Daily" 15:30""")
+    print("""Usage: reminder "Message" <time>\n\nExamples:\n  reminder "Take out the trash" 10m\n  reminder "Team Meeting" 1h\n  reminder "Daily" 15:30""")
 
 def parse_time(time_str):
     # Try relative (10m, 1h)
@@ -60,7 +55,7 @@ def main():
         sys.exit(1)
     
     # Escape single quotes for shell safety
-    safe_msg = msg.replace("'", "'\\\'"")
+    safe_msg = msg.replace("'", "'\\''")
     
     # Command to run in background detached
     # sleep X && notify-send ...
