@@ -2,21 +2,21 @@
 
 A simple, lightweight CLI utility for Linux that sends native desktop notifications after a set period of time. Perfect for Window Manager users (i3, Sway, Hyprland, etc.) or any desktop environment.
 
-## 🚀 Features
+## Features
 
 - Simple, natural syntax (e.g., `10m`, `1h`, `15:30`).
 - Native integration with system notifications (`notify-send`).
 - Lightweight: Written in Python with zero heavy dependencies.
 - Detached execution: Runs in the background, freeing up your terminal immediately.
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Python 3**
 - **libnotify** (`notify-send` command)
   - Arch: `sudo pacman -S libnotify`
   - Debian/Ubuntu: `sudo apt install libnotify-bin`
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
    ```bash
@@ -32,7 +32,7 @@ A simple, lightweight CLI utility for Linux that sends native desktop notificati
 
 3. Ensure `~/.local/bin` is in your system's PATH.
 
-## 📖 Usage
+## Usage
 
 ```bash
 reminder "Message" <time>
@@ -54,6 +54,6 @@ reminder "Lunch" 12:00
 reminder "Quick test" 30s
 ```
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
