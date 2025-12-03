@@ -4,11 +4,11 @@ import re
 import time
 import subprocess
 import datetime
-
-def print_usage():
-    print("""Usage: reminder "Message" <time>\n\nExamples:\n  reminder "Take out the trash" 10m\n  reminder "Team Meeting" 1h\n  reminder "Daily" 15:30""")
+import argparse
+import os
 
 def parse_time(time_str):
+    """Parses time strings like '10m', '1h', '30s' or '15:30' into seconds."""
     # Try relative (10m, 1h)
     match_rel = re.match(r'^(\d+)([hms])$', time_str)
     if match_rel:
@@ -35,41 +35,84 @@ def parse_time(time_str):
 
     return None
 
-def main():
-    if len(sys.argv) < 3:
-        print_usage()
-        sys.exit(1)
+def play_sound():
+    """Plays a system alert sound if available."""
+    # Common path for the 'complete' sound on Freedesktop compliant systems
+    sound_path = "/usr/share/sounds/freedesktop/stereo/complete.oga"
+    
+    if os.path.exists(sound_path):
+        try:
+            # paplay is the standard PulseAudio/PipeWire player
+            subprocess.run(["paplay", sound_path], stderr=subprocess.DEVNULL)
+        except FileNotFoundError:
+            pass # Silently fail if paplay is missing
 
-    msg = sys.argv[1]
-    time_str = sys.argv[2]
+def notify(title, message):
+    """Sends a desktop notification."""
+    subprocess.run([
+        "notify-send",
+        "-a", "Reminder",
+        "-u", "critical",
+        title,
+        message
+    ])
+
+def main():
+    parser = argparse.ArgumentParser(description="A simple CLI reminder tool.")
     
-    seconds = parse_time(time_str)
+    parser.add_argument("message", help="The reminder message (e.g. 'Drink water')")
+    parser.add_argument("time", help="Time delay (e.g. '10m', '1h') or absolute time ('15:30')")
     
-    if seconds is None:
-        print(f"Error: Invalid time format '{time_str}'.")
-        print_usage()
+    parser.add_argument("-m", "--mute", action="store_true", 
+                        help="Disable sound alert")
+    
+    parser.add_argument("-r", "--repeat", type=int, default=1,
+                        help="Number of times to repeat the reminder (default: 1)")
+
+    args = parser.parse_args()
+
+    raw_seconds = parse_time(args.time)
+    
+    if raw_seconds is None:
+        print(f"Error: Invalid time format '{args.time}'. Use '10m', '1h' or 'HH:MM'.")
         sys.exit(1)
         
-    if seconds < 0:
-        print(f"Error: Time {time_str} has already passed today.")
+    if raw_seconds < 0:
+        print(f"Error: Time {args.time} has already passed today.")
         sys.exit(1)
-    
-    # Escape single quotes for shell safety
-    safe_msg = msg.replace("'", "'\\''")
-    
-    # Command to run in background detached
-    # sleep X && notify-send ...
-    cmd = f"sleep {seconds} && notify-send -a 'Reminder' 'Reminder' '{safe_msg}' -u critical"
-    
-    # Execute detached
-    subprocess.Popen(['sh', '-c', cmd], start_new_session=True)
-    
-    # Calculate finish time for visual feedback
-    finish_time = (datetime.datetime.now() + datetime.timedelta(seconds=seconds)).strftime('%H:%M:%S')
-    
+
+    # Calculation for display only (first iteration)
+    finish_time = (datetime.datetime.now() + datetime.timedelta(seconds=raw_seconds)).strftime('%H:%M:%S')
     print(f"✅ Reminder set!")
-    print(f"Msg: {msg}")
+    print(f"Msg: {args.message}")
     print(f"At:  {finish_time}")
+    if args.repeat > 1:
+        print(f"Repeat: {args.repeat} times")
+
+    # The Main Loop
+    for i in range(args.repeat):
+        # If this is a repeat loop (i > 0), we need to recalculate seconds 
+        # IF the input was relative (e.g. 10m). 
+        # If input was absolute (15:30), repeat doesn't make sense immediately, 
+        # but for simplicity we treat 'repeat' as 'wait the same duration again'.
+        
+        current_wait = raw_seconds
+        
+        # Sleep
+        time.sleep(current_wait)
+        
+        # Notify
+        notify("Reminder", args.message)
+        
+        # Sound
+        if not args.mute:
+            play_sound()
+
+        # Feedback for loops
+        if i < args.repeat - 1:
+            # Only print if attached to a terminal
+            if sys.stdout.isatty():
+                print(f"🔁 Repeating... ({i+1}/{args.repeat})")
 
 if __name__ == "__main__":
     main()
