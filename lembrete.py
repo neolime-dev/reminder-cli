@@ -6,15 +6,15 @@ import subprocess
 import datetime
 
 def print_usage():
-    print("""Uso: lembrete "Mensagem" <tempo>
+    print("""Usage: lembrete "Message" <time>
 
-Exemplos:
-  lembrete "Tirar o lixo" 10m
-  lembrete "Reunião" 1h
+Examples:
+  lembrete "Take out the trash" 10m
+  lembrete "Team Meeting" 1h
   lembrete "Daily" 15:30""")
 
 def parse_time(time_str):
-    # Tenta relativo (10m, 1h)
+    # Try relative (10m, 1h)
     match_rel = re.match(r'^(\d+)([hms])$', time_str)
     if match_rel:
         val = int(match_rel.group(1))
@@ -23,7 +23,7 @@ def parse_time(time_str):
         if unit == 'm': return val * 60
         if unit == 'h': return val * 3600
     
-    # Tenta absoluto (15:30)
+    # Try absolute (15:30)
     match_abs = re.match(r'^(\d{1,2}):(\d{2})$', time_str)
     if match_abs:
         now = datetime.datetime.now()
@@ -32,7 +32,7 @@ def parse_time(time_str):
         target = now.replace(hour=h, minute=m, second=0, microsecond=0)
         
         if target < now:
-            # Se já passou, avisa
+            # If time has passed
             return -1
         
         delta = target - now
@@ -51,30 +51,30 @@ def main():
     seconds = parse_time(time_str)
     
     if seconds is None:
-        print(f"Erro: Formato de tempo '{time_str}' inválido.")
+        print(f"Error: Invalid time format '{time_str}'.")
         print_usage()
         sys.exit(1)
         
     if seconds < 0:
-        print(f"Erro: O horário {time_str} já passou hoje.")
+        print(f"Error: Time {time_str} has already passed today.")
         sys.exit(1)
     
-    # Escapar aspas simples para o shell
-    safe_msg = msg.replace("'", "'\\''")
+    # Escape single quotes for shell safety
+    safe_msg = msg.replace("'", "'\\\'"")
     
-    # Comando para rodar em background independente
+    # Command to run in background detached
     # sleep X && notify-send ...
-    cmd = f"sleep {seconds} && notify-send -a 'Lembrete' 'Lembrete' '{safe_msg}' -u critical"
+    cmd = f"sleep {seconds} && notify-send -a 'Reminder' 'Reminder' '{safe_msg}' -u critical"
     
-    # Executa desconectado
+    # Execute detached
     subprocess.Popen(['sh', '-c', cmd], start_new_session=True)
     
-    # Calcula horario final para feedback visual
+    # Calculate finish time for visual feedback
     finish_time = (datetime.datetime.now() + datetime.timedelta(seconds=seconds)).strftime('%H:%M:%S')
     
-    print(f"✅ Lembrete agendado!")
+    print(f"✅ Reminder set!")
     print(f"Msg: {msg}")
-    print(f"Toca às: {finish_time}")
+    print(f"At:  {finish_time}")
 
 if __name__ == "__main__":
     main()
