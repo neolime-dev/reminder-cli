@@ -2,20 +2,16 @@
 
 A simple, lightweight CLI utility for Linux that sends native desktop notifications after a set period of time. Perfect for Window Manager users (i3, Sway, Hyprland, etc.) or any desktop environment.
 
-## ✨ New Features (Desde a última atualização)
-
-- **Persistent Reminders**: Todos os avisos são agora armazenados num arquivo JSON (`~/.reminder_cli.json`), permitindo que você veja o histórico, avisos agendados e avisos 'perdidos' (missed).
-- **Avisos Permanentes**: Notificações que não desaparecem automaticamente até serem fechadas manualmente.
-
 ## 🚀 Features
 
-- Simple, natural syntax (e.g., `10m`, `1h`, `15:30`).
-- Native integration with system notifications (`notify-send`).
-- Lightweight: Written in Python with zero heavy dependencies.
-- Detached execution: Runs in the background, freeing up your terminal immediately.
+- **Simple Syntax**: Natural time formats (e.g., `10m`, `1h`, `15:30`).
+- **Native Integration**: Uses system notifications (`notify-send`).
+- **Persistent Reminders**: All reminders are stored in a JSON file (`~/.reminder_cli.json`), allowing you to view history, scheduled reminders, and missed notifications.
+- **Permanent Reminders**: Option to create sticky notifications that do not disappear until manually closed.
+- **Lightweight**: Written in Python with zero heavy dependencies.
+- **Detached Execution**: Runs in the background, freeing up your terminal immediately.
 - **Sound Alerts**: Plays an audible alert by default when a reminder triggers.
 - **Repeat Reminders**: Schedule a reminder to repeat multiple times.
-- **Command-line Parsing**: Uses `argparse` for robust command-line argument handling and a helpful `--help` page.
 
 ## 📋 Prerequisites
 
@@ -43,10 +39,12 @@ You can install `reminder` using the provided `Makefile`.
 
 ## 📖 Usage
 
+Create a new reminder:
 ```bash
 reminder "Message" <time> [options]
 ```
-Ou para listar avisos:
+
+List all reminders (pending, done, missed):
 ```bash
 reminder --list
 ```
@@ -67,16 +65,16 @@ reminder "Take out the trash" 10m
 # In 1 hour, without sound
 reminder "Team Meeting" 1h --mute
 
-# At a specific time (hoje), with sound, once
+# At a specific time (today), with sound, once
 reminder "Lunch" 12:00
 
 # Every 30 seconds, 3 times
 reminder "Quick break" 30s -r 3
 
-# Um aviso permanente para não esquecer de algo importante
-reminder "Concluir relatório X" 30m --permanent
+# A permanent reminder (sticky) for something important
+reminder "Finish Report X" 30m --permanent
 
-# Listar todos os avisos (pendentes, concluídos, perdidos)
+# List all reminders (pending, completed, missed)
 reminder --list
 ```
 
