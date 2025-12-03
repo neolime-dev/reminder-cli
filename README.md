@@ -2,6 +2,11 @@
 
 A simple, lightweight CLI utility for Linux that sends native desktop notifications after a set period of time. Perfect for Window Manager users (i3, Sway, Hyprland, etc.) or any desktop environment.
 
+## ✨ New Features (Desde a última atualização)
+
+- **Persistent Reminders**: Todos os avisos são agora armazenados num arquivo JSON (`~/.reminder_cli.json`), permitindo que você veja o histórico, avisos agendados e avisos 'perdidos' (missed).
+- **Avisos Permanentes**: Notificações que não desaparecem automaticamente até serem fechadas manualmente.
+
 ## 🚀 Features
 
 - Simple, natural syntax (e.g., `10m`, `1h`, `15:30`).
@@ -41,11 +46,17 @@ You can install `reminder` using the provided `Makefile`.
 ```bash
 reminder "Message" <time> [options]
 ```
+Ou para listar avisos:
+```bash
+reminder --list
+```
 
 ### Options
 
 *   `-m`, `--mute`: Disable sound alert for the reminder.
 *   `-r N`, `--repeat N`: Number of times to repeat the reminder (e.g., `-r 5`). Default is 1.
+*   `-p`, `--permanent`: Make the notification sticky (permanent), meaning it won't disappear until manually dismissed.
+*   `-l`, `--list`: Display a table of all scheduled, pending, and past reminders.
 
 ### Examples
 
@@ -61,6 +72,12 @@ reminder "Lunch" 12:00
 
 # Every 30 seconds, 3 times
 reminder "Quick break" 30s -r 3
+
+# Um aviso permanente para não esquecer de algo importante
+reminder "Concluir relatório X" 30m --permanent
+
+# Listar todos os avisos (pendentes, concluídos, perdidos)
+reminder --list
 ```
 
 ## 📄 License
